@@ -10,6 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "animations.h"
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -301,13 +302,13 @@ class BrowserHistoryManager {
   string sessionStartTime;
 
   void printOK(const string &m) {
-    cout << C::GRN << "  ✅ " << m << C::R << endl;
+    printSuccess(m);
   }
   void printErr(const string &m) {
-    cout << C::RED << "  ❌ " << m << C::R << endl;
+    printError(m);
   }
   void printInfo(const string &m) {
-    cout << C::YEL << "  ℹ️  " << m << C::R << endl;
+    ::printInfo(m);
   }
 
   void printLine() {
@@ -354,30 +355,41 @@ class BrowserHistoryManager {
     vector<string> back = backStack.toVector();
     vector<string> fwd = forwardStack.toVector();
 
+    int visualLen = 0;
+
     // Show max 2 from back stack for clean look
-    int b_start = max(0, (int)back.size() - 2);
-    if (b_start > 0)
+    int num_back = min((int)back.size(), 2);
+    if (back.size() > 2) {
       cout << C::DIM << "... → " << C::R;
-    for (int i = b_start; i >= 0; i--) {
-      if (i < (int)back.size()) {
-        cout << C::DIM << back[i] << " → " << C::R;
-      }
+      visualLen += 6;
+    }
+    for (int i = num_back - 1; i >= 0; i--) {
+      cout << C::DIM << back[i] << " → " << C::R;
+      visualLen += (int)back[i].length() + 3;
     }
 
     // Current
-    if (!currentPage.empty())
+    if (!currentPage.empty()) {
       cout << C::GRN << C::BOLD << "● " << currentPage << " ●" << C::R;
-    else
+      visualLen += (int)currentPage.length() + 4;
+    } else {
       cout << C::DIM << "New Tab" << C::R;
+      visualLen += 7;
+    }
 
     // Show max 2 from forward stack
     int f_end = min((int)fwd.size(), 2);
-    for (int i = 0; i < f_end; i++)
+    for (int i = 0; i < f_end; i++) {
       cout << C::DIM << " → " << fwd[i] << C::R;
-    if ((int)fwd.size() > 2)
+      visualLen += (int)fwd[i].length() + 3;
+    }
+    if ((int)fwd.size() > 2) {
       cout << C::DIM << " → ..." << C::R;
+      visualLen += 6;
+    }
 
-    cout << endl;
+    int pad = max(0, 57 - visualLen);
+    cout << string(pad, ' ') << C::DIM << "│" << C::R << endl;
     cout << C::DIM
          << "  ╰──────────────────────────────────────────────────────────╯"
          << C::R << endl;
@@ -497,6 +509,8 @@ public:
       return;
     }
 
+    animateVisitURL(url);
+
     if (!currentPage.empty())
       backStack.push(currentPage);
     forwardStack.clear();
@@ -506,7 +520,6 @@ public:
     history.insertAtEnd(HistoryEntry(url, ts));
     frequency[url]++;
 
-    printOK("Visited: " + url + "  @  " + ts);
     logAction("Visited URL: " + url);
   }
 
@@ -932,6 +945,7 @@ public:
 
 // ==================== Main ====================
 int main() {
+  showStartupBanner();
   BrowserHistoryManager browser;
   browser.run();
   return 0;
