@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include "animations.h"
+
 using namespace std;
 namespace fs = std::filesystem;
 
@@ -302,13 +302,13 @@ class BrowserHistoryManager {
   string sessionStartTime;
 
   void printOK(const string &m) {
-    printSuccess(m);
+    cout << C::GRN << "  ✓ " << m << C::R << endl;
   }
   void printErr(const string &m) {
-    printError(m);
+    cout << C::RED << "  ✗ " << m << C::R << endl;
   }
   void printInfo(const string &m) {
-    ::printInfo(m);
+    cout << C::CYN << "  ℹ " << m << C::R << endl;
   }
 
   void printLine() {
@@ -335,7 +335,7 @@ class BrowserHistoryManager {
     // URL Bar
     cout << C::DIM << "│ " << C::R;
     if (currentPage.empty()) {
-      cout << C::DIM << "🌐 Search or enter address..." << string(26, ' ')
+      cout << C::DIM << " Search or enter address..." << string(26, ' ')
            << C::R;
     } else {
       string star =
@@ -509,7 +509,7 @@ public:
       return;
     }
 
-    animateVisitURL(url);
+    printOK("Successfully loaded: " + url);
 
     if (!currentPage.empty())
       backStack.push(currentPage);
@@ -942,6 +942,22 @@ public:
     }
   }
 };
+
+// ==================== Startup Banner ====================
+void showStartupBanner() {
+  vector<string> banner = {
+      "    ____  ____  ____ _       _______  __________",
+      "   / __ )/ __ \\/ __ \\ |     / / ___/ / ____/ __ \\",
+      "  / __  / /_/ / / / / | /| / /\\__ \\ / __/ / /_/ /",
+      " / /_/ / _, _/ /_/ /| |/ |/ /___/ // /___/ _, _/ ",
+      "/_____/_/ |_|\\____/ |__/|__//____//_____/_/ |_|  "
+  };
+  cout << "\n" << C::CYN << C::BOLD;
+  for (const auto& line : banner) {
+      cout << line << endl;
+  }
+  cout << C::R << "\n\n";
+}
 
 // ==================== Main ====================
 int main() {

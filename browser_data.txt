@@ -1,5 +1,5 @@
 #CURRENT
-www.poogle.com
+www.github.com
 #HISTORY
 github.com|2026-05-07 15:40:56
 stackoverflow.com|2026-05-07 15:40:56
@@ -12,6 +12,7 @@ test.com|2026-05-07 15:51:17
 google.com|2026-05-07 15:58:46
 stackoverflow.com|2026-05-07 15:58:46
 test.com|2026-05-07 16:07:24
+www.github.com|2026-05-21 13:32:39
 www.poogle.com|2026-05-08 10:52:22
 #BOOKMARKS
 github.com|2026-05-07 15:40:56
@@ -24,6 +25,7 @@ github.com|2
 stackoverflow.com|2
 test.com|2
 youtube.com|1
+www.github.com|1
 #BACKSTACK
 google.com
 github.com
@@ -35,6 +37,7 @@ test.com
 google.com
 stackoverflow.com
 test.com
+www.poogle.com
 #FORWARDSTACK
 #UNDOSTACK
 #END
